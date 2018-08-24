@@ -1,0 +1,23 @@
+    <div id="container">
+      <div class="row">
+      <h1>Scrape the Universe Daily</h1>
+      </div>
+      <div class="row">
+        <div class="col-2"><button><a href="/saved">Saved Articles</a></button></div>
+        </div>
+      <div class="row">
+          <div class="data"></div>
+      <div id="articles">
+
+            {{#each articles}}
+                <p id="title-{{@index}}">{{this.title}}</p>
+                <a href="{{this.link}}" id="link-{{@index}}">{{this.link}}</a> 
+                {{#if this.excerpt}}
+                    <p id="excerpt-{{@index}}">{{this.excerpt}}</p>
+                {{/if}}
+              <button data-id={{@index}} class="save-article">Save</button>  
+            {{/each}}
+      
+      </div>
+    </div>
+    </div>

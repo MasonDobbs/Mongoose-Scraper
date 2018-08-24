@@ -1,0 +1,39 @@
+<div class="container">
+<div class="row">
+  <div class="col-2"><button><a href="/saved">Saved Articles</a></button></div>
+  <div class="col-2"><button><a href="/">Home</a></button></div>
+  <h3>"{{data.title}}" Notes</h3>
+</div>
+<div class="row">
+    <div class="col-6">
+      <div class="card mt-4">
+        <div class="card-body">
+        <form class="clearfix mb-4">
+          <div class="form-group">
+            <label for="title-note">Title</label>
+            <input type="text" id="title-note" class="form-control" aria-describedby="example-text" placeholder="Title of note">
+          </div>
+          <div class="form-group">
+            <label for="note-description">Make a note on the article</label>
+            <textarea class="form-control" id="note-description" aria-describedby="note-description" placeholder="Your Comment"></textarea>
+          </div>
+          <br>
+            <button id="submit-note" data-id={{data._id}}>Submit</button>
+        </form>
+          <h4>Previous Comments</h4>
+          {{#if data.note}}
+            {{#each data.note}}
+              <hr>
+                <p><strong>{{this.title}}</strong></p>
+                <p>{{this.body}}</p>
+                <button data-id={{this._id}} class="delete-note">Delete</button>
+                <hr>
+            {{/each}}
+          {{else}}
+            <h6>There are no comments on this article.</h6>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    </div>
+</div>

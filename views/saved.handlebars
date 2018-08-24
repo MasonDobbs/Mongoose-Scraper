@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <h1>Saved Articles</h1>
+        </div>
+         <div class="col-4 float-right"><button><a href="/">Home</a></button></div>
+    </div>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-9">
+
+            {{#each saved}}
+                <p>{{this.title}}</p>
+                <a href="{{this.link}}">{{this.link}}</a>  
+                {{#if this.excerpt}}
+                    <p>{{this.excerpt}}</p>
+                {{/if}}
+                <button data-id={{this._id}} class="delete-article">Delete from Saved</button>
+                <button data-id={{this._id}} class="note-comment">Article Notes</button>
+                  <hr>
+            {{/each}}
+        </div>
+    </div>
+</div>
