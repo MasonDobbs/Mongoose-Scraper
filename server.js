@@ -45,7 +45,6 @@ var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 var results = [];
-var titleArr = [];
 
 // Routes
 
@@ -53,9 +52,45 @@ app.get("/", function(req, res) {
     res.render("index");
 });
 
+// // A GET route for scraping the Daily Universe website
+// app.get("/scrape", function(req, res) {
+//   request("https://universe.byu.edu/", function(error, response, html) {
+//     if (!error && response.statusCode == 200) {
+//         // console.log(html);
+//       }
+//     // Then, we load that into cheerio and save it to $ for a shorthand selector
+//     var $ = cheerio.load(html, {
+//       xml: {
+//         normalizeWhitespace: true,
+//       }
+//     })
+//     $("body h3").each(function(i, element) {
+//       // Save an empty result object
+//       var result = {};
+//       // Add the text and href of every link, and save them as properties of the result object
+//       result.title = $(element).children("a").text();
+//       result.link = $(element).children("a").attr("href");
+//       result.excerpt = $(element).parent().children(".td-excerpt").text().trim();
+//       if (result.title && result.link){
+//         results.push(result);
+//      }
+//     });
+//     console.log(results);
+//        res.render("scrape", {
+//       articles: results
+//     });
+
 // A GET route for scraping the Daily Universe website
 app.get("/scrape", function(req, res) {
-  request("https://universe.byu.edu/", function(error, response, html) {
+  var found;
+  var titleArr = [];
+    db.Article.find({})
+      .then(function(dbArticle) {
+        for (var j=0; j<dbArticle.length;j++) {
+          titleArr.push(dbArticle[j].title)
+        }
+        console.log(titleArr);
+    request("https://universe.byu.edu/", function(error, response, html) {
     if (!error && response.statusCode == 200) {
         // console.log(html);
       }
@@ -70,9 +105,10 @@ app.get("/scrape", function(req, res) {
       var result = {};
       // Add the text and href of every link, and save them as properties of the result object
       result.title = $(element).children("a").text();
+      found = titleArr.includes(result.title);
       result.link = $(element).children("a").attr("href");
       result.excerpt = $(element).parent().children(".td-excerpt").text().trim();
-      if (result.title && result.link){
+      if (!found && result.title && result.link){
         results.push(result);
      }
     });
@@ -80,50 +116,31 @@ app.get("/scrape", function(req, res) {
        res.render("scrape", {
       articles: results
     });
-
-      // db.Article.find({})
-      // .then(function(dbArticle) {
-      //   var titleArr = [];
-      //   for (var j=0; j<dbArticle.length;j++) {
-      //     titleArr.push(dbArticle[j].title)
-      //   }
-      //   var found = titleArr.includes(result.title);
-      //   if (!found && result.title && result.link){
-      //     results.push(result);
-      //  }
-      // })
-      // .then(function(results) {
-      //   console.log(results);
-      // })
-      // .catch(function(err) {
-      //   // If an error occurred, send it to the client
-      //   return res.json(err);
-      // });
-
-    // console.log(articles);
-    // If we were able to successfully scrape and save an Article, send a message to the client
-    // res.render("index", {
-    //   articles: articles
-    // });
   })
 });
+});
 
-function check(title) {
-      db.Article.find({})
-      .then(function(dbArticle) {
-        for (var j=0; j<dbArticle.length;j++) {
-          titleArr.push(dbArticle[j].title)
-        }
-        var found = titleArr.includes(title);
-        console.log(titleArr);
-        if (found){
-          return true;
-        }
-        else {
-          return false;
-        }
-      });
-      }
+// function check(title) {
+//     db.Article.find({})
+//     .then(function(dbArticle) {
+//       var found;
+//       var titleArr = [];
+//       for (var j=0; j<dbArticle.length;j++) {
+//         titleArr.push(dbArticle[j].title)
+//       }
+//       var p = Promise.resolve(titleArr);
+//       p.then(function() {
+//         found = titleArr.includes(title);
+//         console.log(titleArr);
+//         if (found){
+//           return true;
+//         }
+//         else {
+//           return false;
+//         }
+//       });
+//     });
+// }
 
 // Route for getting all Articles from the db
 app.get("/saved", function(req, res) {
@@ -213,10 +230,7 @@ app.post("/articles/:id", function(req, res) {
     });
 });
 
-// var mystery = check('WCC tournament championship game (Mar. 6, 2018)');
-
 // Start the server
 app.listen(PORT, function() {
   console.log("App running on port " + PORT + "!");
-  console.log(check('Education Week: Music brings hope'));
 });
