@@ -25,6 +25,6 @@ The client can make a note or read a comment by navigating to the "/articles/_id
 
 ##### About this Application
 
-This repository is for an application deployed at:
+This repository is for an application deployed at: https://boiling-island-52680.herokuapp.com/
 This repository is for a full stack JavaScript application, employing various technologies, including NPM packages (Express, Express-Handlebars, Body Parser, Morgan, Mongoose, Request and Cheerio), Handlebars templating, database handling, and styling with CSS. 
 The application allows the client to interact with a server to submit and update data. The application employs a simple client/server full-stack approach, with a front end (HTML-Handlebars, CSS), middleware (Express, Body-parser) and back end (Mongoose models).  This project was created and is maintained by me, Marjika Howarth.

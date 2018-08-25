@@ -34,9 +34,6 @@ app.engine(
 );
 app.set("view engine", "handlebars");
 
-// Connect to the Mongo DB
-//mongoose.connect("mongodb://localhost/week18Populater");
-
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
@@ -51,34 +48,6 @@ var results = [];
 app.get("/", function(req, res) {
     res.render("index");
 });
-
-// // A GET route for scraping the Daily Universe website
-// app.get("/scrape", function(req, res) {
-//   request("https://universe.byu.edu/", function(error, response, html) {
-//     if (!error && response.statusCode == 200) {
-//         // console.log(html);
-//       }
-//     // Then, we load that into cheerio and save it to $ for a shorthand selector
-//     var $ = cheerio.load(html, {
-//       xml: {
-//         normalizeWhitespace: true,
-//       }
-//     })
-//     $("body h3").each(function(i, element) {
-//       // Save an empty result object
-//       var result = {};
-//       // Add the text and href of every link, and save them as properties of the result object
-//       result.title = $(element).children("a").text();
-//       result.link = $(element).children("a").attr("href");
-//       result.excerpt = $(element).parent().children(".td-excerpt").text().trim();
-//       if (result.title && result.link){
-//         results.push(result);
-//      }
-//     });
-//     console.log(results);
-//        res.render("scrape", {
-//       articles: results
-//     });
 
 // A GET route for scraping the Daily Universe website
 app.get("/scrape", function(req, res) {
@@ -120,28 +89,6 @@ app.get("/scrape", function(req, res) {
 });
 });
 
-// function check(title) {
-//     db.Article.find({})
-//     .then(function(dbArticle) {
-//       var found;
-//       var titleArr = [];
-//       for (var j=0; j<dbArticle.length;j++) {
-//         titleArr.push(dbArticle[j].title)
-//       }
-//       var p = Promise.resolve(titleArr);
-//       p.then(function() {
-//         found = titleArr.includes(title);
-//         console.log(titleArr);
-//         if (found){
-//           return true;
-//         }
-//         else {
-//           return false;
-//         }
-//       });
-//     });
-// }
-
 // Route for getting all Articles from the db
 app.get("/saved", function(req, res) {
   // Grab every document in the Articles collection
@@ -158,9 +105,8 @@ app.get("/saved", function(req, res) {
     });
 });
 
-// Route for getting all Articles from the db
+// Route for creating an Article in the db
 app.post("/api/saved", function(req, res) {
-  // Grab every document in the Articles collection
   db.Article.create(req.body)
     .then(function(dbArticle) {
       console.log(dbArticle);
@@ -193,6 +139,7 @@ app.get("/articles/:id", function(req, res) {
     });
 });
 
+//Route for deleting an article from the db
 app.delete("/saved/:id", function(req, res) {
   db.Article.deleteOne({ _id: req.params.id })
     .catch(function(err) {
@@ -201,6 +148,7 @@ app.delete("/saved/:id", function(req, res) {
     });
 });
 
+//Route for deleting a note
 app.delete("/articles/:id", function(req, res) {
   db.Note.deleteOne({ _id: req.params.id })
     .catch(function(err) {
@@ -214,9 +162,6 @@ app.post("/articles/:id", function(req, res) {
   // Create a new note and pass the req.body to the entry
   db.Note.create(req.body)
     .then(function(dbNote) {
-      // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
-      // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
-      // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
       return db.Article.findOneAndUpdate({ _id: req.params.id }, {$push: { note: dbNote._id }}, { new: true });
     })
     .then(function(dbArticle) {
