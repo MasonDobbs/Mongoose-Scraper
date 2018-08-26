@@ -168,11 +168,7 @@ app.post("/articles/:id", function(req, res) {
       db.Article.findOneAndUpdate({ _id: req.params.id }, {$push: { note: dbNote._id }}, { new: true })
       .then(function(dbArticle) {
         console.log(dbArticle);
-        if (dbArticle) {
-          res.render("articles", {
-            data: dbArticle
-          });
-        }
+        res.json(dbArticle);
       })
       .catch(function(err) {
         // If an error occurred, send it to the client

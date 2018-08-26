@@ -65,10 +65,11 @@ $(document).on("click", ".note-comment", function() {
       .then(function(data) {
         // Log the response
         console.log(data);
-        // Also, remove the values entered in the input and textarea for note entry
-        $("#title-note").val("");
-        $("#note-description").val("");
+        window.location.replace("/articles/" + data._id);
       });  
+      // Also, remove the values entered in the input and textarea for note entry
+      $("#title-note").val("");
+      $("#note-description").val("");
   });
   
   //delete a note
