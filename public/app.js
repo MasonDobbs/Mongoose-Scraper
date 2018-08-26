@@ -59,16 +59,14 @@ $(document).on("click", ".note-comment", function() {
         body: $("#note-description").val()
       }
     })
-      // With that done
       .then(function(data) {
         // Log the response
         console.log(data);
-      });
-  
+      });  
     // Also, remove the values entered in the input and textarea for note entry
+    window.location.replace("/articles/" + thisId);
     $("#title-note").val("");
     $("#note-description").val("");
-    location.reload();
   });
   
   //delete a note
