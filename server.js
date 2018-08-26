@@ -81,8 +81,7 @@ app.get("/scrape", function(req, res) {
         results.push(result);
      }
     });
-    console.log(results);
-       res.render("scrape", {
+      res.render("scrape", {
       articles: results
     });
   })
@@ -109,7 +108,7 @@ app.get("/saved", function(req, res) {
 app.post("/api/saved", function(req, res) {
   db.Article.create(req.body)
     .then(function(dbArticle) {
-      console.log(dbArticle);
+      res.json(dbArticle);
     })
     .catch(function(err) {
       // If an error occurred, send it to the client
