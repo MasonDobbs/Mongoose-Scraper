@@ -169,12 +169,7 @@ app.post("/articles/:id", function(req, res) {
     })
     .then(function(dbArticle) {
       console.log(dbArticle);
-      // If we were able to successfully update an Article, send it back to the client
-      if (dbArticle) {
-        res.render("articles", {
-          data: dbArticle
-        });
-      }
+      res.json(dbArticle);
     })
     .catch(function(err) {
       // If an error occurred, send it to the client
