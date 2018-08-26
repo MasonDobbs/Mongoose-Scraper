@@ -62,9 +62,9 @@ $(document).on("click", ".note-comment", function() {
       .then(function(data) {
         // Log the response
         console.log(data);
+        location.reload();
       });  
     // Also, remove the values entered in the input and textarea for note entry
-    window.location.replace("/articles/" + thisId);
     $("#title-note").val("");
     $("#note-description").val("");
   });
@@ -77,5 +77,5 @@ $(document).on("click", ".note-comment", function() {
       method: "DELETE",
       url: "/articles/" + thisId
     })
-    location.reload();
+    location.reload(); 
 });
