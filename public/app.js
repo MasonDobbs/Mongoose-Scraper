@@ -14,7 +14,11 @@ $(document).on("click", ".delete-article", function() {
       method: "DELETE",
       url: "/saved/" + thisId
     })
-    location.reload();
+    .then(function(data) {
+      // Log the response
+      console.log(data);
+      location.reload();
+    });
 });
 
 //Save an article
@@ -25,7 +29,6 @@ $(document).on("click", ".save-article", function() {
   data.title =  $("#title-" + thisId).text();
   data.link = $("#link-" + thisId).text();
   data.excerpt = $("#excerpt-" + thisId).text();
-  console.log(data);
   $.ajax({
     method: "POST",
     dataType: "json",
@@ -72,10 +75,13 @@ $(document).on("click", ".note-comment", function() {
   //delete a note
   $(document).on("click", ".delete-note", function() {
     var thisId = $(this).attr("data-id");
-    console.log("clicked " + thisId);
     $.ajax({
       method: "DELETE",
       url: "/articles/" + thisId
     })
-    location.reload(); 
+    .then(function(data) {
+      // Log the response
+      console.log(data);
+      location.reload();
+    }); 
 });

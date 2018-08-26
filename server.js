@@ -142,18 +142,22 @@ app.get("/articles/:id", function(req, res) {
 //Route for deleting an article from the db
 app.delete("/saved/:id", function(req, res) {
   db.Article.deleteOne({ _id: req.params.id })
-    .catch(function(err) {
+  .then(function(removed) {
+    res.json(removed);
+  }).catch(function(err,removed) {
       // If an error occurred, send it to the client
-      res.json(err);
+        res.json(err);
     });
 });
 
 //Route for deleting a note
 app.delete("/articles/:id", function(req, res) {
   db.Note.deleteOne({ _id: req.params.id })
-    .catch(function(err) {
+  .then(function(removed) {
+    res.json(removed);
+  }).catch(function(err,removed) {
       // If an error occurred, send it to the client
-      res.json(err);
+        res.json(err);
     });
 });
 
